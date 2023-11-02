@@ -35,7 +35,7 @@ export default function RootLayout({
 
 ```
 
-Then, import the `abstraxion` modal in your react/next project and trigger however you'd like, for example:
+Then, import the `Abstraxion` modal in your react/next project and trigger however you'd like, for example:
 
 ```
 "use client";
