@@ -56,4 +56,4 @@ export default function Home() {
 
 Feel free to consult the documentation for more advanced usage and configuration.
 
-Please check back regularly for updates and feel free to report any issues. Thank you for using `Chrge` by Burnt Labs!
+Please check back regularly for updates and feel free to report any issues. Thank you for using `abstraxion` by Burnt Labs!
