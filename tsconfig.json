@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "jsx": "react-jsx",
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "node",   // Use Node-style module resolution              // Use this if your project uses React
+        "strict": true,               // Enable all strict type-checking options
+        "esModuleInterop": true,      // Enables CommonJS/ES module interoperability
+        "skipLibCheck": true,         // Skip type-checking for all declaration files (*.d.ts)
+        "outDir": "./dist",           // Output directory for the compiled files
+        "sourceMap": true
+    }
+}

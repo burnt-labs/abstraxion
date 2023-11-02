@@ -1,0 +1,16 @@
+# General
+node_modules/
+dist/
+.parcel-cache
+*.log
+
+# Environment files
+.env
+
+# Editors
+.idea/
+.vscode/
+
+# OS generated
+.DS_Store
+Thumbs.db
