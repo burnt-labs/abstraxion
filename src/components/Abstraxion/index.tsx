@@ -18,7 +18,6 @@ import { apolloClient, stytchClient } from "../../lib";
 export interface AbstraxionModalProps {
   onClose: VoidFunction;
   isOpen: boolean;
-  children?: React.ReactNode;
 }
 
 export const Abstraxion = ({ isOpen, onClose }: AbstraxionModalProps) => {
@@ -45,7 +44,7 @@ export const Abstraxion = ({ isOpen, onClose }: AbstraxionModalProps) => {
     <ModalAnchor ref={modalRef}>
       <AbstraxionModal>
         {abstraxionError ? (
-          <ErrorDisplay message={abstraxionError} />
+          <ErrorDisplay message={abstraxionError} onClose={onClose} />
         ) : isConnecting || isReconnecting ? (
           <WalletLoading />
         ) : isConnected ? (
@@ -58,16 +57,13 @@ export const Abstraxion = ({ isOpen, onClose }: AbstraxionModalProps) => {
   );
 };
 
-// TODO: Pull in all the providers from up above and stack them here...
 export const AbstraxionProvider = ({
-  onClose,
   children,
 }: {
-  onClose: VoidFunction;
   children: React.ReactNode;
 }) => {
   return (
-    <AbstraxionContextProvider onClose={onClose}>
+    <AbstraxionContextProvider>
       <StytchProvider stytch={stytchClient}>
         <ApolloProvider client={apolloClient}>
           <GrazProvider>{children}</GrazProvider>

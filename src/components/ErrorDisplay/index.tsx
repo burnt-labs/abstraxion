@@ -11,8 +11,14 @@ import {
   AbstraxionContextProps,
 } from "../AbstraxionContext";
 
-export const ErrorDisplay = ({ message }: { message?: string }) => {
-  const { onClose, setAbstraxionError } = useContext(
+export const ErrorDisplay = ({
+  message,
+  onClose,
+}: {
+  message?: string;
+  onClose: VoidFunction;
+}) => {
+  const { setAbstraxionError } = useContext(
     AbstraxionContext,
   ) as AbstraxionContextProps;
 
