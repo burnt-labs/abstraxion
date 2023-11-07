@@ -6,6 +6,10 @@ export interface AbstraxionContextProps {
   setConnectionType: React.Dispatch<
     React.SetStateAction<"stytch" | "graz" | "none">
   >;
+  abstractAccount: any; // TODO: Properly define interface here
+  setAbstractAccount: React.Dispatch<any>;
+  abstraxionError: string;
+  setAbstraxionError: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const AbstraxionContext = createContext<AbstraxionContextProps>(
@@ -22,6 +26,10 @@ export const AbstraxionContextProvider = ({
   const [connectionType, setConnectionType] = useState<
     "stytch" | "graz" | "none"
   >("none");
+  const [abstractAccount, setAbstractAccount] = useState<any | undefined>(
+    undefined,
+  );
+  const [abstraxionError, setAbstraxionError] = useState("");
   const handleClose = () => {
     onClose();
   };
@@ -32,6 +40,10 @@ export const AbstraxionContextProvider = ({
         onClose: handleClose,
         connectionType,
         setConnectionType,
+        abstractAccount,
+        setAbstractAccount,
+        abstraxionError,
+        setAbstraxionError,
       }}
     >
       {children}

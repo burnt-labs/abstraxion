@@ -93,3 +93,11 @@ export const TOSLink = styled.a`
     text-decoration: underline;
   }
 `;
+
+export const CenteredFlexBox = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

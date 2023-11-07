@@ -39,6 +39,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
         `}
         ${$structure === "outlined" && // disabled & outlined
         css`
+          background-color: transparent;
           border: 1px solid #bdbdbd;
           color: #bdbdbd;
         `}
@@ -77,6 +78,9 @@ export const StyledButton = styled.button<StyledButtonProps>`
         return css`
           border: none;
           background-color: inherit;
+          color: black;
+          text-decoration: underline;
+          font-weight: 400;
         `;
       } else if ($theme === "secondary") {
         // naked & secondary

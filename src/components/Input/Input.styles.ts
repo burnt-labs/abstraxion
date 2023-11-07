@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 interface StyledInputProps {
   $fullwidth?: boolean;
+  $error?: string;
 }
 
 export const StyledInput = styled.input<StyledInputProps>`
@@ -19,6 +20,12 @@ export const StyledInput = styled.input<StyledInputProps>`
       width: 100%;
     `}
 
+  ${(props) =>
+    props.$error &&
+    css`
+      border: 1px solid red;
+    `}
+
   &:focus {
     outline: none;
   }
@@ -26,4 +33,17 @@ export const StyledInput = styled.input<StyledInputProps>`
   &::placeholder {
     color: #bdbdbd;
   }
+`;
+
+export const InputContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 1px;s
+`;
+
+export const InputErrorMessage = styled.p`
+  color: red;
+  font-size: 11px;
+  font-weight: 500;
 `;

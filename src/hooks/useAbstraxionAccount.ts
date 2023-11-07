@@ -19,7 +19,7 @@ export const useAbstraxionAccount = (
   const { session } = useStytchSession();
   const { data, isConnected, isConnecting, isReconnecting } = useAccount();
 
-  const { setConnectionType } = useContext(
+  const { setConnectionType, abstractAccount } = useContext(
     AbstraxionContext,
   ) as AbstraxionContextProps;
 
@@ -39,8 +39,7 @@ export const useAbstraxionAccount = (
 
   switch (type) {
     case "stytch":
-      // TODO: Use extended AA library to properly populate data here
-      return { data: session, isConnected: !!session };
+      return { data: abstractAccount, isConnected: !!session };
     case "graz":
       return {
         data: data,

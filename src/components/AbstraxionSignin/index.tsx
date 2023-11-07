@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { WalletType, useSuggestChainAndConnect } from "graz";
 import { useStytch } from "@stytch/react";
 import PinInput from "react-pin-input";
@@ -19,6 +19,7 @@ import {
   AbstraxionContextProps,
 } from "../AbstraxionContext";
 import { testChainInfo } from "../../../chain";
+import { EMAIL_REGEX } from "../../../utils/regex";
 
 export const AbstraxionSignin = () => {
   const stytchClient = useStytch();
@@ -29,6 +30,7 @@ export const AbstraxionSignin = () => {
   const [isOnOtpStep, setIsOnOtpStep] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpError, setOtpError] = useState("");
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
   const { setConnectionType } = useContext(
     AbstraxionContext,
@@ -45,16 +47,34 @@ export const AbstraxionSignin = () => {
     },
   });
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmailError("");
+    setEmail(e.target.value.toLowerCase());
+  };
+
+  const validateEmail = () => {
+    if (EMAIL_REGEX.test(email) || email === "") {
+      setEmailError("");
+    } else {
+      setEmailError("Invalid Email Format");
+    }
+  };
+
   const handleEmail = async (event: any) => {
     event.preventDefault();
+
+    if (!email) {
+      setEmailError("Please enter your email");
+      return;
+    }
 
     try {
       setConnectionType("stytch");
       const emailRes = await stytchClient.otps.email.loginOrCreate(email);
       setMethodId(emailRes.method_id);
       setIsOnOtpStep(true);
+      setTimeLeft(60);
     } catch (error) {
-      console.log(error);
       setEmailError("Error sending email");
       setConnectionType("none");
     }
@@ -68,7 +88,6 @@ export const AbstraxionSignin = () => {
         session_duration_minutes: 60,
       });
     } catch (error) {
-      console.log(error);
       setOtpError("Error verifying otp");
     }
   };
@@ -77,6 +96,18 @@ export const AbstraxionSignin = () => {
     setConnectionType("graz");
     suggestAndConnect({ chainInfo: testChainInfo, walletType: wallet });
   };
+
+  // For the "resend otp" countdown
+  useEffect(() => {
+    if (timeLeft === 0) {
+      setTimeLeft(null);
+    }
+    if (!timeLeft) return;
+    const intervalId = setInterval(() => {
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, [timeLeft]);
 
   return (
     <ModalSection>
@@ -92,6 +123,7 @@ export const AbstraxionSignin = () => {
             length={6}
             initialValue=""
             onChange={(value) => {
+              setOtpError("");
               setOtp(value);
             }}
             type="numeric"
@@ -102,7 +134,7 @@ export const AbstraxionSignin = () => {
               justifyContent: "space-between",
             }}
             inputStyle={{
-              border: "none",
+              border: otpError ? "1px solid red" : "none",
               backgroundColor: "#F2F2F2",
               borderRadius: "2px",
               height: "64px",
@@ -123,11 +155,10 @@ export const AbstraxionSignin = () => {
               structure="outlined"
               theme="secondary"
               fullwidth={true}
-              onClick={() => {
-                console.log("resend");
-              }}
+              onClick={handleEmail}
+              disabled={!!timeLeft}
             >
-              Resend Code
+              Resend Code {timeLeft && `in ${timeLeft} seconds`}
             </Button>
           </StytchButtonGroup>
         </>
@@ -138,9 +169,16 @@ export const AbstraxionSignin = () => {
             placeholder="Email address"
             fullwidth={true}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
+            error={emailError}
+            onBlur={validateEmail}
           />
-          <Button fullwidth={true} onClick={handleEmail}>
+          <Button
+            structure="base"
+            fullwidth={true}
+            onClick={handleEmail}
+            disabled={!!emailError}
+          >
             Log in / Sign up
           </Button>
           <HorizontalDivider>OR</HorizontalDivider>

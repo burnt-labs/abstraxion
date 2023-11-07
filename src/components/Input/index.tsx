@@ -1,7 +1,7 @@
 import React from "react";
-import { StyledInput } from "./Input.styles";
+import { InputContainer, InputErrorMessage, StyledInput } from "./Input.styles";
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: "text" | "password" | "number" | "email" | "date" | "tel";
   placeholder?: string;
   name?: string;
@@ -9,6 +9,7 @@ interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   fullwidth: boolean;
+  error?: string;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -19,16 +20,23 @@ export const Input: React.FC<InputProps> = ({
   onChange,
   className,
   fullwidth = false,
+  error,
+  ...props
 }) => {
   return (
-    <StyledInput
-      type={type}
-      placeholder={placeholder}
-      name={name}
-      value={value}
-      onChange={onChange}
-      className={className}
-      $fullwidth={fullwidth}
-    />
+    <InputContainer>
+      <StyledInput
+        type={type}
+        placeholder={placeholder}
+        name={name}
+        value={value}
+        onChange={onChange}
+        className={className}
+        $fullwidth={fullwidth}
+        $error={error}
+        {...props}
+      />
+      <InputErrorMessage>{error}</InputErrorMessage>
+    </InputContainer>
   );
 };
