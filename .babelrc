@@ -1,11 +1,14 @@
 {
-    "plugins": [
-      [
-        "babel-plugin-styled-components",
-        {
-          "displayName": false,
-          "pure": true
-        }
-      ]
+  "plugins": [
+    "relay",
+    "@babel/plugin-proposal-class-properties",
+    "@parcel/babel-plugin-transform-runtime",
+    [
+      "babel-plugin-styled-components",
+      {
+        "displayName": false,
+        "pure": true
+      }
     ]
-  }
+  ]
+}

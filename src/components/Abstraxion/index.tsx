@@ -2,11 +2,16 @@ import { useContext, useEffect, useRef } from "react";
 import { GrazProvider } from "graz";
 import { StytchProvider } from "@stytch/react";
 import { ApolloProvider } from "@apollo/client";
+import { CloseIcon } from "../Icons/CloseIcon";
 import { ErrorDisplay } from "../ErrorDisplay";
 import { WalletLoading } from "../WalletLoading";
 import { AbstraxionWallets } from "../AbstraxionWallets";
 import { AbstraxionSignin } from "../AbstraxionSignin";
-import { AbstraxionModal, ModalAnchor } from "./Abstraxtion.styles";
+import {
+  AbstraxionClose,
+  AbstraxionModal,
+  ModalAnchor,
+} from "./Abstraxtion.styles";
 import {
   AbstraxionContext,
   AbstraxionContextProps,
@@ -23,12 +28,11 @@ export interface AbstraxionModalProps {
 export const Abstraxion = ({ isOpen, onClose }: AbstraxionModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const { connectionType, abstraxionError } = useContext(
+  const { abstraxionError } = useContext(
     AbstraxionContext,
   ) as AbstraxionContextProps;
 
-  const { isConnected, isConnecting, isReconnecting } =
-    useAbstraxionAccount(connectionType);
+  const { isConnected, isConnecting, isReconnecting } = useAbstraxionAccount();
 
   useEffect(() => {
     const closeOnEscKey = (e: any) => (e.key === "Escape" ? onClose() : null);
@@ -43,6 +47,9 @@ export const Abstraxion = ({ isOpen, onClose }: AbstraxionModalProps) => {
   return (
     <ModalAnchor ref={modalRef}>
       <AbstraxionModal>
+        <AbstraxionClose onClick={onClose}>
+          <CloseIcon />
+        </AbstraxionClose>
         {abstraxionError ? (
           <ErrorDisplay message={abstraxionError} onClose={onClose} />
         ) : isConnecting || isReconnecting ? (

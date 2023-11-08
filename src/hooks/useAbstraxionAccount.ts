@@ -6,20 +6,28 @@ import {
   AbstraxionContextProps,
 } from "../components/AbstraxionContext";
 
+export interface AbstraxionAccount {
+  name?: string;
+  algo?: string;
+  pubKey?: Uint8Array;
+  address?: Uint8Array;
+  bech32Address: string;
+  isNanoLedger?: boolean;
+  isKeystone?: boolean;
+}
+
 export interface useAbstraxionAccountProps {
-  data?: any; // TODO: Define interface for data
+  data?: AbstraxionAccount;
   isConnected: boolean;
   isConnecting?: boolean;
   isReconnecting?: boolean;
 }
 
-export const useAbstraxionAccount = (
-  type: "stytch" | "graz" | "none",
-): useAbstraxionAccountProps => {
+export const useAbstraxionAccount = () => {
   const { session } = useStytchSession();
   const { data, isConnected, isConnecting, isReconnecting } = useAccount();
 
-  const { setConnectionType, abstractAccount } = useContext(
+  const { connectionType, setConnectionType, abstractAccount } = useContext(
     AbstraxionContext,
   ) as AbstraxionContextProps;
 
@@ -32,22 +40,28 @@ export const useAbstraxionAccount = (
       }
     };
 
-    if (type === "none") {
+    if (connectionType === "none") {
       refreshConnectionType();
     }
   }, [session, data]);
 
-  switch (type) {
+  switch (connectionType) {
     case "stytch":
-      return { data: abstractAccount, isConnected: !!session };
+      return {
+        data: {
+          ...abstractAccount,
+          bech32Address: abstractAccount?.id,
+        } as AbstraxionAccount,
+        isConnected: !!session,
+      };
     case "graz":
       return {
-        data: data,
+        data: data as AbstraxionAccount,
         isConnected: isConnected,
         isConnecting: isConnecting,
         isReconnecting: isReconnecting,
       };
     default:
-      return { data: null, isConnected: false };
+      return { data: undefined, isConnected: false };
   }
 };

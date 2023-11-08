@@ -18,7 +18,7 @@ import {
   AbstraxionContext,
   AbstraxionContextProps,
 } from "../AbstraxionContext";
-import { testChainInfo } from "../../../chain";
+import { testnetChainInfo } from "../../../chain";
 import { EMAIL_REGEX } from "../../../utils/regex";
 
 export const AbstraxionSignin = () => {
@@ -94,7 +94,7 @@ export const AbstraxionSignin = () => {
 
   const handleConnect = (wallet: WalletType) => {
     setConnectionType("graz");
-    suggestAndConnect({ chainInfo: testChainInfo, walletType: wallet });
+    suggestAndConnect({ chainInfo: testnetChainInfo, walletType: wallet });
   };
 
   // For the "resend otp" countdown

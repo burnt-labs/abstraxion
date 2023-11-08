@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
+import { useDisconnect } from "graz";
 import { useStytch, useStytchUser } from "@stytch/react";
 import { useQuery } from "@apollo/client";
-import { useDisconnect } from "graz";
 import { Button } from "../Button";
 import { WalletLoading } from "../WalletLoading";
 import { AbstraxionTitle } from "../Abstraxion/Abstraxtion.styles";
@@ -22,6 +22,7 @@ import {
 import { useAbstraxionAccount } from "../../hooks/useAbstraxionAccount";
 import { truncateAddress } from "../../../utils/truncateAddress";
 import { AllSmartWalletQuery } from "../../interfaces/queries";
+import { AccountWalletLogo } from "../Icons/AccountWalletLogo";
 
 export const AbstraxionWallets = () => {
   const {
@@ -38,7 +39,7 @@ export const AbstraxionWallets = () => {
   const session_token = stytchClient.session.getTokens()?.session_token;
 
   const { disconnect } = useDisconnect();
-  const { data: account } = useAbstraxionAccount(connectionType);
+  const { data: account } = useAbstraxionAccount();
   const { loading, error, data, refetch } = useQuery(AllSmartWalletQuery, {
     variables: {
       authenticator: `project-test-185e9a9f-8bab-42f2-a924-953a59e8ff94.${user?.user_id}`,
@@ -48,7 +49,8 @@ export const AbstraxionWallets = () => {
   const [isGeneratingNewWallet, setIsGeneratingNewWallet] = useState(false);
 
   if (error) {
-    return <WalletsSection>{error.message}</WalletsSection>;
+    setAbstraxionError((error as Error).message);
+    return null;
   }
 
   const handleDisconnect = async () => {
@@ -72,7 +74,7 @@ export const AbstraxionWallets = () => {
       }
       setIsGeneratingNewWallet(true);
       const res = await fetch(
-        "http://localhost:8000/api/v1/jwt-account/create",
+        "https://burnt-abstraxion-api.onrender.com/api/v1/jwt-accounts/create",
         {
           method: "POST",
           headers: {
@@ -86,7 +88,7 @@ export const AbstraxionWallets = () => {
         },
       );
       const body = await res.json();
-      if (res.status !== 200) {
+      if (!res.ok) {
         throw new Error(body.error);
       }
       await refetch();
@@ -106,24 +108,12 @@ export const AbstraxionWallets = () => {
         <WalletsSection>
           <AbstraxionTitle>Welcome Back</AbstraxionTitle>
           {connectionType === "graz" ? (
-            <AccountCard>
-              <svg
-                width="48"
-                height="48"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect width="48" height="48" rx="24" fill="black" />
-                <path
-                  d="M33.8947 30.8289V31.9342C33.8947 33.15 32.9 34.1447 31.6842 34.1447H16.2105C14.9837 34.1447 14 33.15 14 31.9342V16.4605C14 15.2447 14.9837 14.25 16.2105 14.25H31.6842C32.9 14.25 33.8947 15.2447 33.8947 16.4605V17.5658H23.9474C22.7205 17.5658 21.7368 18.5605 21.7368 19.7763V28.6184C21.7368 29.8342 22.7205 30.8289 23.9474 30.8289H33.8947ZM23.9474 28.6184H35V19.7763H23.9474V28.6184ZM28.3684 25.8553C27.4511 25.8553 26.7105 25.1147 26.7105 24.1974C26.7105 23.28 27.4511 22.5395 28.3684 22.5395C29.2858 22.5395 30.0263 23.28 30.0263 24.1974C30.0263 25.1147 29.2858 25.8553 28.3684 25.8553Z"
-                  fill="white"
-                />
-              </svg>
+            <AccountCard $selected>
+              <AccountWalletLogo />
               <AccountCardSection>
-                <AccountCardName>{account.name}</AccountCardName>
+                <AccountCardName>{account?.name}</AccountCardName>
                 <AccountCardSub>
-                  {truncateAddress(account.bech32Address)}
+                  {truncateAddress(account?.bech32Address)}
                 </AccountCardSub>
               </AccountCardSection>
             </AccountCard>
@@ -138,19 +128,7 @@ export const AbstraxionWallets = () => {
                       onClick={() => setAbstractAccount(node)}
                       $selected={node.id === abstractAccount?.id}
                     >
-                      <svg
-                        width="48"
-                        height="48"
-                        viewBox="0 0 48 48"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect width="48" height="48" rx="24" fill="black" />
-                        <path
-                          d="M33.8947 30.8289V31.9342C33.8947 33.15 32.9 34.1447 31.6842 34.1447H16.2105C14.9837 34.1447 14 33.15 14 31.9342V16.4605C14 15.2447 14.9837 14.25 16.2105 14.25H31.6842C32.9 14.25 33.8947 15.2447 33.8947 16.4605V17.5658H23.9474C22.7205 17.5658 21.7368 18.5605 21.7368 19.7763V28.6184C21.7368 29.8342 22.7205 30.8289 23.9474 30.8289H33.8947ZM23.9474 28.6184H35V19.7763H23.9474V28.6184ZM28.3684 25.8553C27.4511 25.8553 26.7105 25.1147 26.7105 24.1974C26.7105 23.28 27.4511 22.5395 28.3684 22.5395C29.2858 22.5395 30.0263 23.28 30.0263 24.1974C30.0263 25.1147 29.2858 25.8553 28.3684 25.8553Z"
-                          fill="white"
-                        />
-                      </svg>
+                      <AccountWalletLogo />
                       <AccountCardSection>
                         <AccountCardName>
                           Personal Account {i + 1}

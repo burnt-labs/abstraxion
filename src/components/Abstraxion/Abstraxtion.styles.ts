@@ -16,10 +16,30 @@ export const ModalAnchor = styled.div`
 `;
 
 export const AbstraxionModal = styled.div`
+  position: relative;
   width: 100%;
   max-width: 465px;
   background: white;
   color: black;
+`;
+
+export const AbstraxionClose = styled.button`
+  padding: 0.5rem;
+  border-radius: 8px;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 999;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #fafafa;
+  }
 `;
 
 export const ModalSection = styled.div`
