@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { WalletType, useSuggestChainAndConnect } from "graz";
-import { useStytch } from "@stytch/react";
+import { useStytch } from "@stytch/nextjs";
 import PinInput from "react-pin-input";
 import { Button } from "../Button";
 import { Input } from "../Input";

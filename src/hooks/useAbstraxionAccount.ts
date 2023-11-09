@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useAccount } from "graz";
-import { useStytchSession } from "@stytch/react";
+import { useStytchSession } from "@stytch/nextjs";
 import {
   AbstraxionContext,
   AbstraxionContextProps,
