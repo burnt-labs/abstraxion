@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useDisconnect } from "graz";
-import { useStytch, useStytchUser } from "@stytch/react";
+import { useStytch, useStytchUser } from "@stytch/nextjs";
 import { useQuery } from "@apollo/client";
 import { Button } from "../Button";
 import { WalletLoading } from "../WalletLoading";

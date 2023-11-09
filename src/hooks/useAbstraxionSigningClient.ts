@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { GasPrice } from "graz/dist/cosmjs";
-import { useStytch } from "@stytch/react";
+import { useStytch } from "@stytch/nextjs";
 import { useCosmWasmSigningClient } from "graz";
 import {
   AAClient,

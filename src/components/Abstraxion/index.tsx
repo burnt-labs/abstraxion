@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { GrazProvider } from "graz";
-import { StytchProvider } from "@stytch/react";
+import { StytchProvider } from "@stytch/nextjs";
 import { ApolloProvider } from "@apollo/client";
 import { CloseIcon } from "../Icons/CloseIcon";
 import { ErrorDisplay } from "../ErrorDisplay";
