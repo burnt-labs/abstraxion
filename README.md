@@ -4,9 +4,15 @@ The `abstraxion` library is an account abstraction solution tailored for the XIO
 
 ## Installation
 
-_Coming Soon_
+Run the following:
+
+```
+npm i @burnt-labs/abstraxion
+```
 
 ## Basic Usage
+
+Find an implementation demo here: [abstraxion demo](https://github.com/burnt-labs/abstraxion-demo)
 
 First, wrap your app in the `AbstraxionProvider` at the top level
 
@@ -35,7 +41,7 @@ export default function RootLayout({
 
 ```
 
-Then, import the `Abstraxion` modal in your react/next project and trigger however you'd like, for example:
+Then, import the `Abstraxion` modal and trigger however you'd like, for example:
 
 ```
 "use client";
@@ -52,6 +58,13 @@ export default function Home() {
   );
 }
 
+```
+
+Finally, call the exported hooks to serve your functionality needs:
+
+```
+const { data: account } = useAbstraxionAccount();
+const { client } = useAbstraxionSigningClient();
 ```
 
 Feel free to consult the documentation for more advanced usage and configuration.
