@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDisconnect } from "graz";
 import { useStytch, useStytchUser } from "@stytch/nextjs";
 import { useQuery } from "@apollo/client";
@@ -23,6 +23,7 @@ import { useAbstraxionAccount } from "../../hooks/useAbstraxionAccount";
 import { truncateAddress } from "../../../utils/truncateAddress";
 import { AllSmartWalletQuery } from "../../interfaces/queries";
 import { AccountWalletLogo } from "../Icons/AccountWalletLogo";
+import { Spinner } from "../Icons/Spinner";
 
 export const AbstraxionWallets = () => {
   const {
@@ -40,13 +41,24 @@ export const AbstraxionWallets = () => {
 
   const { disconnect } = useDisconnect();
   const { data: account } = useAbstraxionAccount();
-  const { loading, error, data, refetch } = useQuery(AllSmartWalletQuery, {
-    variables: {
-      authenticator: `project-test-185e9a9f-8bab-42f2-a924-953a59e8ff94.${user?.user_id}`,
-    },
-  });
+  const { loading, error, data, startPolling, stopPolling, previousData } =
+    useQuery(AllSmartWalletQuery, {
+      variables: {
+        authenticator: `project-test-185e9a9f-8bab-42f2-a924-953a59e8ff94.${user?.user_id}`,
+      },
+      fetchPolicy: "network-only",
+      notifyOnNetworkStatusChange: true,
+    });
 
   const [isGeneratingNewWallet, setIsGeneratingNewWallet] = useState(false);
+  const [fetchingNewWallets, setFetchingNewWallets] = useState(false);
+
+  useEffect(() => {
+    if (previousData && data !== previousData) {
+      stopPolling();
+      setFetchingNewWallets(false);
+    }
+  }, [data, previousData]);
 
   if (error) {
     setAbstraxionError((error as Error).message);
@@ -91,7 +103,8 @@ export const AbstraxionWallets = () => {
       if (!res.ok) {
         throw new Error(body.error);
       }
-      await refetch();
+      startPolling(500);
+      setFetchingNewWallets(true);
       return;
     } catch (error) {
       setAbstraxionError("Error creating abstract account.");
@@ -102,7 +115,7 @@ export const AbstraxionWallets = () => {
 
   return (
     <>
-      {isGeneratingNewWallet || loading ? (
+      {isGeneratingNewWallet ? (
         <WalletLoading />
       ) : (
         <WalletsSection>
@@ -121,7 +134,9 @@ export const AbstraxionWallets = () => {
             <AccountsSection>
               <AccountsHeader>Accounts</AccountsHeader>
               <WalletList>
-                {data?.smartAccounts.nodes.length >= 1 ? (
+                {loading || fetchingNewWallets ? (
+                  <Spinner />
+                ) : data?.smartAccounts.nodes.length >= 1 ? (
                   data?.smartAccounts?.nodes?.map((node: any, i: number) => (
                     <AccountCard
                       key={i}
