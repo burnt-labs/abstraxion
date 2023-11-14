@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { useDisconnect } from "graz";
 import { useStytch, useStytchUser } from "@stytch/nextjs";
 import { useQuery } from "@apollo/client";
+import { AccountWalletLogo } from "../Icons/AccountWalletLogo";
+import { Spinner } from "../Icons/Spinner";
 import { Button } from "../Button";
 import { WalletLoading } from "../WalletLoading";
 import { AbstraxionTitle } from "../Abstraxion/Abstraxtion.styles";
@@ -22,8 +24,6 @@ import {
 import { useAbstraxionAccount } from "../../hooks/useAbstraxionAccount";
 import { truncateAddress } from "../../../utils/truncateAddress";
 import { AllSmartWalletQuery } from "../../interfaces/queries";
-import { AccountWalletLogo } from "../Icons/AccountWalletLogo";
-import { Spinner } from "../Icons/Spinner";
 
 export const AbstraxionWallets = () => {
   const {
