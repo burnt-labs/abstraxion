@@ -32,7 +32,7 @@ export const AbstraxionSignin = () => {
   const [otpError, setOtpError] = useState("");
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
-  const { setConnectionType } = useContext(
+  const { setConnectionType, config } = useContext(
     AbstraxionContext,
   ) as AbstraxionContextProps;
 
@@ -94,7 +94,10 @@ export const AbstraxionSignin = () => {
 
   const handleConnect = (wallet: WalletType) => {
     setConnectionType("graz");
-    suggestAndConnect({ chainInfo: testnetChainInfo, walletType: wallet });
+    suggestAndConnect({
+      chainInfo: config?.chainInfo || testnetChainInfo,
+      walletType: wallet,
+    });
   };
 
   // For the "resend otp" countdown

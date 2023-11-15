@@ -1,4 +1,13 @@
 import { ReactNode, createContext, useState } from "react";
+import { ChainInfo } from "../../../chain";
+
+export interface AbstraxionConfig {
+  apiUrl?: string;
+  projectId?: string;
+  chainInfo?: ChainInfo;
+  publicToken?: string;
+  indexerUrl?: string;
+}
 
 export interface AbstraxionContextProps {
   connectionType: "stytch" | "graz" | "none";
@@ -9,6 +18,7 @@ export interface AbstraxionContextProps {
   setAbstractAccount: React.Dispatch<any>;
   abstraxionError: string;
   setAbstraxionError: React.Dispatch<React.SetStateAction<string>>;
+  config?: AbstraxionConfig;
 }
 
 export const AbstraxionContext = createContext<AbstraxionContextProps>(
@@ -17,8 +27,10 @@ export const AbstraxionContext = createContext<AbstraxionContextProps>(
 
 export const AbstraxionContextProvider = ({
   children,
+  config,
 }: {
   children: ReactNode;
+  config?: AbstraxionConfig; // TODO: Define this
 }) => {
   const [connectionType, setConnectionType] = useState<
     "stytch" | "graz" | "none"
@@ -37,6 +49,7 @@ export const AbstraxionContextProvider = ({
         setAbstractAccount,
         abstraxionError,
         setAbstraxionError,
+        config,
       }}
     >
       {children}

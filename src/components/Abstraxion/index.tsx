@@ -13,12 +13,13 @@ import {
   ModalAnchor,
 } from "./Abstraxtion.styles";
 import {
+  AbstraxionConfig,
   AbstraxionContext,
   AbstraxionContextProps,
   AbstraxionContextProvider,
 } from "../AbstraxionContext";
 import { useAbstraxionAccount } from "../../hooks/useAbstraxionAccount";
-import { apolloClient, stytchClient } from "../../lib";
+import { getStytchClient, getApolloClient } from "../../lib";
 
 export interface AbstraxionModalProps {
   onClose: VoidFunction;
@@ -66,11 +67,16 @@ export const Abstraxion = ({ isOpen, onClose }: AbstraxionModalProps) => {
 
 export const AbstraxionProvider = ({
   children,
+  config,
 }: {
   children: React.ReactNode;
+  config?: AbstraxionConfig;
 }) => {
+  const stytchClient = getStytchClient(config?.publicToken);
+  const apolloClient = getApolloClient(config?.indexerUrl);
+
   return (
-    <AbstraxionContextProvider>
+    <AbstraxionContextProvider config={config}>
       <StytchProvider stytch={stytchClient}>
         <ApolloProvider client={apolloClient}>
           <GrazProvider>{children}</GrazProvider>

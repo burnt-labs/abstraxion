@@ -32,6 +32,7 @@ export const AbstraxionWallets = () => {
     abstractAccount,
     setAbstractAccount,
     setAbstraxionError,
+    config,
   } = useContext(AbstraxionContext) as AbstraxionContextProps;
 
   const { user } = useStytchUser();
@@ -39,12 +40,19 @@ export const AbstraxionWallets = () => {
   const session_jwt = stytchClient.session.getTokens()?.session_jwt;
   const session_token = stytchClient.session.getTokens()?.session_token;
 
+  const API_URL = `${
+    config?.apiUrl || "https://burnt-abstraxion-api.onrender.com"
+  }/api/v1/jwt-accounts/create`;
+  const AUTHENTICATOR = `${
+    config?.projectId || "project-test-185e9a9f-8bab-42f2-a924-953a59e8ff94"
+  }.${user?.user_id}`;
+
   const { disconnect } = useDisconnect();
   const { data: account } = useAbstraxionAccount();
   const { loading, error, data, startPolling, stopPolling, previousData } =
     useQuery(AllSmartWalletQuery, {
       variables: {
-        authenticator: `project-test-185e9a9f-8bab-42f2-a924-953a59e8ff94.${user?.user_id}`,
+        authenticator: AUTHENTICATOR,
       },
       fetchPolicy: "network-only",
       notifyOnNetworkStatusChange: true,
@@ -85,20 +93,17 @@ export const AbstraxionWallets = () => {
         throw new Error("Missing token/jwt");
       }
       setIsGeneratingNewWallet(true);
-      const res = await fetch(
-        "https://burnt-abstraxion-api.onrender.com/api/v1/jwt-accounts/create",
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            salt: Date.now().toString(),
-            session_jwt,
-            session_token,
-          }),
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          salt: Date.now().toString(),
+          session_jwt,
+          session_token,
+        }),
+      });
       const body = await res.json();
       if (!res.ok) {
         throw new Error(body.error);

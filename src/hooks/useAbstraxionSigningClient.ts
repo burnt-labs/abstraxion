@@ -13,7 +13,7 @@ import {
 import { testnetChainInfo } from "../../chain";
 
 export const useAbstraxionSigningClient = () => {
-  const { connectionType, abstractAccount } = useContext(
+  const { connectionType, abstractAccount, config } = useContext(
     AbstraxionContext,
   ) as AbstraxionContextProps;
 
@@ -32,13 +32,11 @@ export const useAbstraxionSigningClient = () => {
         sessionToken,
       );
 
-      const jwtClient = await AAClient.connectWithSigner(
-        testnetChainInfo.rpc,
-        jwtSigner,
-        {
-          gasPrice: GasPrice.fromString("10uxion"),
-        },
-      );
+      const rpc = config?.chainInfo?.rpc || testnetChainInfo.rpc;
+
+      const jwtClient = await AAClient.connectWithSigner(rpc, jwtSigner, {
+        gasPrice: GasPrice.fromString("10uxion"),
+      });
 
       setAbstractClient(jwtClient);
     }
