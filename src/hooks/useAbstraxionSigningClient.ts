@@ -36,7 +36,7 @@ export const useAbstraxionSigningClient = () => {
         testnetChainInfo.rpc,
         jwtSigner,
         {
-          gasPrice: GasPrice.fromString("10uxion"),
+          gasPrice: GasPrice.fromString("0uxion"),
         },
       );
 
