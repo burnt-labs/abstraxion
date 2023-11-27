@@ -195,7 +195,7 @@ export const AbstraxionWallets = () => {
                   fullwidth={true}
                   onClick={registerWebAuthn}
                 >
-                  Add Passkey/TouchID
+                  Add Passkey/Biometrics
                 </Button>
               )}
             <Button

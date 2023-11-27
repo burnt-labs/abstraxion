@@ -202,7 +202,7 @@ export const AbstraxionSignin = () => {
               fullwidth={true}
               onClick={handleWebauthnAuthenticate}
             >
-              Passkey/TouchID
+              Passkey/Biometrics
             </Button>
             <AdvancedFilter onClick={() => setShowAdvanced(!showAdvanced)}>
               Advanced <ChevronDown isUp={showAdvanced} />{" "}
