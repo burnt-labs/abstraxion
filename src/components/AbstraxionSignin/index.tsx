@@ -102,7 +102,7 @@ export const AbstraxionSignin = () => {
   async function handleWebauthnAuthenticate() {
     try {
       await stytchClient.webauthn.authenticate({
-        domain: "localhost",
+        domain: window.location.hostname,
         session_duration_minutes: 60,
       });
     } catch (error) {

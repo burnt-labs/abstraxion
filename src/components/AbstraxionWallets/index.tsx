@@ -118,7 +118,7 @@ export const AbstraxionWallets = () => {
   const registerWebAuthn = useCallback(async () => {
     try {
       await stytchClient.webauthn.register({
-        domain: "localhost",
+        domain: window.location.hostname,
         session_duration_minutes: 60,
       });
     } catch (error) {
