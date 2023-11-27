@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useDisconnect } from "graz";
 import { useStytch, useStytchUser } from "@stytch/nextjs";
 import { useQuery } from "@apollo/client";
@@ -17,6 +17,7 @@ import {
   WalletList,
   WalletsSection,
 } from "./AbstraxionWallets.styles";
+import { ColumnButtonGroup } from "../AbstraxionSignin/AbstraxionSignin.styles";
 import {
   AbstraxionContext,
   AbstraxionContextProps,
@@ -107,11 +108,23 @@ export const AbstraxionWallets = () => {
       setFetchingNewWallets(true);
       return;
     } catch (error) {
+      console.log(error);
       setAbstraxionError("Error creating abstract account.");
     } finally {
       setIsGeneratingNewWallet(false);
     }
   };
+
+  const registerWebAuthn = useCallback(async () => {
+    try {
+      await stytchClient.webauthn.register({
+        domain: window.location.hostname,
+        session_duration_minutes: 60,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, [stytchClient]);
 
   return (
     <>
@@ -140,7 +153,9 @@ export const AbstraxionWallets = () => {
                   data?.smartAccounts?.nodes?.map((node: any, i: number) => (
                     <AccountCard
                       key={i}
-                      onClick={() => setAbstractAccount(node)}
+                      onClick={() =>
+                        setAbstractAccount({ ...node, userId: user?.user_id })
+                      }
                       $selected={node.id === abstractAccount?.id}
                     >
                       <AccountWalletLogo />
@@ -170,14 +185,28 @@ export const AbstraxionWallets = () => {
               </Button>
             </AccountsSection>
           )}
-          <Button
-            structure="outlined"
-            theme="secondary"
-            fullwidth={true}
-            onClick={handleDisconnect}
-          >
-            Disconnect
-          </Button>
+          <ColumnButtonGroup>
+            {connectionType === "stytch" &&
+              user &&
+              user?.webauthn_registrations.length < 1 && (
+                <Button
+                  structure="outlined"
+                  theme="secondary"
+                  fullwidth={true}
+                  onClick={registerWebAuthn}
+                >
+                  Add Passkey/TouchID
+                </Button>
+              )}
+            <Button
+              structure="outlined"
+              theme="secondary"
+              fullwidth={true}
+              onClick={handleDisconnect}
+            >
+              Disconnect
+            </Button>
+          </ColumnButtonGroup>
         </WalletsSection>
       )}
     </>

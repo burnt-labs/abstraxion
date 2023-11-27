@@ -13,13 +13,14 @@ import {
   TOSDisclaimer,
   TOSLink,
 } from "../Abstraxion/Abstraxtion.styles";
-import { StytchButtonGroup } from "./AbstraxionSignin.styles";
+import { AdvancedFilter, ColumnButtonGroup } from "./AbstraxionSignin.styles";
 import {
   AbstraxionContext,
   AbstraxionContextProps,
 } from "../AbstraxionContext";
 import { testnetChainInfo } from "../../../chain";
 import { EMAIL_REGEX } from "../../../utils/regex";
+import { ChevronDown } from "../Icons/ChevronDown";
 
 export const AbstraxionSignin = () => {
   const stytchClient = useStytch();
@@ -31,6 +32,7 @@ export const AbstraxionSignin = () => {
   const [otp, setOtp] = useState("");
   const [otpError, setOtpError] = useState("");
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const { setConnectionType } = useContext(
     AbstraxionContext,
@@ -97,6 +99,17 @@ export const AbstraxionSignin = () => {
     suggestAndConnect({ chainInfo: testnetChainInfo, walletType: wallet });
   };
 
+  async function handleWebauthnAuthenticate() {
+    try {
+      await stytchClient.webauthn.authenticate({
+        domain: window.location.hostname,
+        session_duration_minutes: 60,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // For the "resend otp" countdown
   useEffect(() => {
     if (timeLeft === 0) {
@@ -147,7 +160,7 @@ export const AbstraxionSignin = () => {
             autoSelect={true}
             regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
           />
-          <StytchButtonGroup>
+          <ColumnButtonGroup>
             <Button fullwidth={true} onClick={handleOtp}>
               Confirm
             </Button>
@@ -160,7 +173,7 @@ export const AbstraxionSignin = () => {
             >
               Resend Code {timeLeft && `in ${timeLeft} seconds`}
             </Button>
-          </StytchButtonGroup>
+          </ColumnButtonGroup>
         </>
       ) : (
         <>
@@ -182,28 +195,44 @@ export const AbstraxionSignin = () => {
             Log in / Sign up
           </Button>
           <HorizontalDivider>OR</HorizontalDivider>
-          <ButtonGroup>
+          <ColumnButtonGroup>
             <Button
               structure="outlined"
               theme="secondary"
               fullwidth={true}
-              onClick={() => {
-                handleConnect(WalletType.METAMASK_SNAP_LEAP);
-              }}
+              onClick={handleWebauthnAuthenticate}
             >
-              Metamask
+              Passkey/TouchID
             </Button>
-            <Button
-              structure="outlined"
-              theme="secondary"
-              fullwidth={true}
-              onClick={() => {
-                handleConnect(WalletType.KEPLR);
-              }}
-            >
-              Keplr
-            </Button>
-          </ButtonGroup>
+            <AdvancedFilter onClick={() => setShowAdvanced(!showAdvanced)}>
+              Advanced <ChevronDown isUp={showAdvanced} />{" "}
+              {showAdvanced ? "Login with an existing EOA" : ""}
+            </AdvancedFilter>
+            {showAdvanced && (
+              <ButtonGroup>
+                <Button
+                  structure="outlined"
+                  theme="secondary"
+                  fullwidth={true}
+                  onClick={() => {
+                    handleConnect(WalletType.METAMASK_SNAP_LEAP);
+                  }}
+                >
+                  Metamask
+                </Button>
+                <Button
+                  structure="outlined"
+                  theme="secondary"
+                  fullwidth={true}
+                  onClick={() => {
+                    handleConnect(WalletType.KEPLR);
+                  }}
+                >
+                  Keplr
+                </Button>
+              </ButtonGroup>
+            )}
+          </ColumnButtonGroup>
           <TOSDisclaimer>
             By continuing, you agree to Burnt's{" "}
             <TOSLink href="https://google.com">Terms of Service</TOSLink> and
