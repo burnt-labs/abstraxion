@@ -41,10 +41,10 @@ export const AbstraxionWallets = () => {
   const session_token = stytchClient.session.getTokens()?.session_token;
 
   const API_URL = `${
-    config?.apiUrl || "https://burnt-abstraxion-api.onrender.com"
+    config?.apiUrl || "https://aa.xion-testnet-1.burnt.com"
   }/api/v1/jwt-accounts/create`;
   const AUTHENTICATOR = `${
-    config?.projectId || "project-test-185e9a9f-8bab-42f2-a924-953a59e8ff94"
+    config?.projectId || "project-live-7e4a3221-79cd-4f34-ac1d-fedac4bde13e"
   }.${user?.user_id}`;
 
   const { disconnect } = useDisconnect();

@@ -12,7 +12,7 @@ let apolloClientInstance: ApolloClient<NormalizedCacheObject>;
 export const getStytchClient = (token?: string) => {
   if (!stytchClientInstance) {
     stytchClientInstance = createStytchHeadlessClient(
-      token || "public-token-test-62177c24-f8f4-4ddd-962b-0436b445ccaa",
+      token || "public-token-live-59266a62-2720-4452-8984-b65cd54c8838",
     );
   }
   return stytchClientInstance;
