@@ -41,12 +41,9 @@ export const AbstraxionWallets = () => {
   const session_jwt = stytchClient.session.getTokens()?.session_jwt;
   const session_token = stytchClient.session.getTokens()?.session_token;
 
-  const API_URL = `${
-    config?.apiUrl || "https://aa.xion-testnet-1.burnt.com"
-  }/api/v1/jwt-accounts/create`;
-  const AUTHENTICATOR = `${
-    config?.projectId || "project-live-7e4a3221-79cd-4f34-ac1d-fedac4bde13e"
-  }.${user?.user_id}`;
+  const API_URL =
+    "https://aa.xion-testnet-1.burnt.com/api/v1/jwt-accounts/create";
+  const AUTHENTICATOR = `project-live-7e4a3221-79cd-4f34-ac1d-fedac4bde13e.${user?.user_id}`;
 
   const { disconnect } = useDisconnect();
   const { data: account } = useAbstraxionAccount();

@@ -30,6 +30,7 @@ export const useAbstraxionSigningClient = () => {
       const jwtSigner = new AbstractAccountJWTSigner(
         abstractAccount.bech32Address,
         sessionToken,
+        config?.indexerUrl,
       );
 
       const rpc = config?.chainInfo?.rpc || testnetChainInfo.rpc;

@@ -9,10 +9,10 @@ import { StytchHeadlessClient } from "@stytch/vanilla-js/dist/index.headless";
 let stytchClientInstance: StytchHeadlessClient;
 let apolloClientInstance: ApolloClient<NormalizedCacheObject>;
 
-export const getStytchClient = (token?: string) => {
+export const getStytchClient = () => {
   if (!stytchClientInstance) {
     stytchClientInstance = createStytchHeadlessClient(
-      token || "public-token-live-59266a62-2720-4452-8984-b65cd54c8838",
+      "public-token-live-59266a62-2720-4452-8984-b65cd54c8838",
     );
   }
   return stytchClientInstance;

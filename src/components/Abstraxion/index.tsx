@@ -72,7 +72,7 @@ export const AbstraxionProvider = ({
   children: React.ReactNode;
   config?: AbstraxionConfig;
 }) => {
-  const stytchClient = getStytchClient(config?.publicToken);
+  const stytchClient = getStytchClient();
   const apolloClient = getApolloClient(config?.indexerUrl);
 
   return (

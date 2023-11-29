@@ -2,10 +2,7 @@ import { ReactNode, createContext, useState } from "react";
 import { ChainInfo } from "../../../chain";
 
 export interface AbstraxionConfig {
-  apiUrl?: string;
-  projectId?: string;
   chainInfo?: ChainInfo;
-  publicToken?: string;
   indexerUrl?: string;
 }
 
