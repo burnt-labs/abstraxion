@@ -3,7 +3,7 @@ import { createStytchHeadlessClient } from "@stytch/nextjs/headless";
 
 // TODO: Temporarily hard-coded
 export const stytchClient = createStytchHeadlessClient(
-  "public-token-test-62177c24-f8f4-4ddd-962b-0436b445ccaa",
+  "public-token-live-59266a62-2720-4452-8984-b65cd54c8838",
 );
 
 // TODO: Refactor to be dynamic. Local dev uri must be device IP.
