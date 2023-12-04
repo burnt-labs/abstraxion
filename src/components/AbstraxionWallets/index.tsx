@@ -25,6 +25,8 @@ import {
 import { useAbstraxionAccount } from "../../hooks/useAbstraxionAccount";
 import { truncateAddress } from "../../../utils/truncateAddress";
 import { AllSmartWalletQuery } from "../../interfaces/queries";
+import { decodeJwt } from "jose";
+
 
 export const AbstraxionWallets = () => {
   const {
@@ -40,12 +42,15 @@ export const AbstraxionWallets = () => {
   const session_jwt = stytchClient.session.getTokens()?.session_jwt;
   const session_token = stytchClient.session.getTokens()?.session_token;
 
+  const { aud, sub } = decodeJwt(session_jwt || "");
+  if(!aud || !sub) throw new Error("Missing aud or sub");
+
   const { disconnect } = useDisconnect();
   const { data: account } = useAbstraxionAccount();
   const { loading, error, data, startPolling, stopPolling, previousData } =
     useQuery(AllSmartWalletQuery, {
       variables: {
-        authenticator: `project-test-185e9a9f-8bab-42f2-a924-953a59e8ff94.${user?.user_id}`,
+        authenticator: `${Array.isArray(aud) ? aud[0] : aud}.${sub}`,
       },
       fetchPolicy: "network-only",
       notifyOnNetworkStatusChange: true,
