@@ -37,6 +37,7 @@ export const useAbstraxionSigningClient = () => {
         jwtSigner,
         {
           gasPrice: GasPrice.fromString("0uxion"),
+          broadcastPollIntervalMs: 1_000,
         },
       );
 
