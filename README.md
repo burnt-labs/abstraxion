@@ -1,3 +1,6 @@
+> [!IMPORTANT]  
+> Active development of this package has moved [here](https://github.com/burnt-labs/xion.js)
+
 # abstraxion
 
 The `abstraxion` library is an account abstraction solution tailored for the XION chain. It offers a clean and streamlined way to create abstract accounts, sign transactions, integrating seamlessly with [graz](https://github.com/graz-sh/graz), to additionally provide traditional cosmos wallet functionalities.
